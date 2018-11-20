@@ -25,34 +25,35 @@ def main():
         # Image to numpy array:
         screen = np.array(screen)
         # 4 channel(PNG) to 3 channel(JPG)
-        Y = predict(model, img)
-        if Y == [0,0,0,0]:
-            # Not action
-            continue
-        elif Y[0] == -1 and Y[1] == -1:
-            # Only keyboard action.
-            key = get_key(Y[3])
-            if Y[2] == 1:
-                # Press:
-                press(key)
-            else:
-                # Release:
-                release(key)
-        elif Y[2] == 0 and Y[3] == 0:
-            # Only mouse action.
-            click(Y[0], Y[1])
-        else:
-            # Mouse and keyboard action.
-            # Mouse:
-            click(Y[0], Y[1])
-            # Keyboard:
-            key = get_key(Y[3])
-            if Y[2] == 1:
-                # Press:
-                press(key)
-            else:
-                # Release:
-                release(key)
+        Y = predict(model, screen)
+        print(Y)
+        # if Y == [0,0,0,0]:
+        #     # Not action
+        #     continue
+        # elif Y[0] == -1 and Y[1] == -1:
+        #     # Only keyboard action.
+        #     key = get_key(Y[3])
+        #     if Y[2] == 1:
+        #         # Press:
+        #         press(key)
+        #     else:
+        #         # Release:
+        #         release(key)
+        # elif Y[2] == 0 and Y[3] == 0:
+        #     # Only mouse action.
+        #     click(Y[0], Y[1])
+        # else:
+        #     # Mouse and keyboard action.
+        #     # Mouse:
+        #     click(Y[0], Y[1])
+        #     # Keyboard:
+        #     key = get_key(Y[3])
+        #     if Y[2] == 1:
+        #         # Press:
+        #         press(key)
+        #     else:
+        #         # Release:
+        #         release(key)
 
 if __name__ == '__main__':
     main()

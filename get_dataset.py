@@ -4,6 +4,7 @@ import numpy as np
 from keras.utils import to_categorical
 from scipy.misc import imread, imresize, imsave
 from sklearn.model_selection import train_test_split
+import asyncio
 
 def get_img(data_path):
     # Getting image array from path:
@@ -12,12 +13,16 @@ def get_img(data_path):
     return img
 
 def save_img(img, path):
+    print(path)
     imsave(path, img)
     return
 
 def get_dataset(dataset_path='Data/Train_Data'):
     # Getting all data from data path:
+
+    print("getting data set")
     try:
+        print("getting data set loading")
         X = np.load('Data/npy_train_data/X.npy')
         Y = np.load('Data/npy_train_data/Y.npy')
     except:
@@ -29,6 +34,7 @@ def get_dataset(dataset_path='Data/Train_Data'):
             datas_path = dataset_path+'/'+label
             for data in os.listdir(datas_path):
                 img = get_img(datas_path+'/'+data)
+                print(img)
                 X.append(img)
                 # For encode labels:
                 if data != count_categori[1]:

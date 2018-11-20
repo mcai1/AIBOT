@@ -10,7 +10,8 @@ def get_key(id):
     return get_keys()[id]
 
 def get_id(key):
-    return get_keys().index(key)
+    list = get_keys()
+    return list.index(key)
 
 keyboard = Keyboard()
 mouse = Mouse()

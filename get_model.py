@@ -30,17 +30,17 @@ def get_model():
 
     pooling_1 = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(act_3)
 
-    conv_4 = Conv2D(128, (3,3), strides=(1,1))(pooling_1)
-    act_4 = Activation('relu')(conv_4)
+    # conv_4 = Conv2D(128, (3,3), strides=(1,1))(pooling_1)
+    # act_4 = Activation('relu')(conv_4)
+    #
+    # pooling_2 = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(act_4)
 
-    pooling_2 = MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(act_4)
+    flat_1 = Flatten()(pooling_1)
 
-    flat_1 = Flatten()(pooling_2)
-
-    fc = Dense(1280)(flat_1)
+    fc = Dense(615)(flat_1)
     fc = Activation('relu')(fc)
     fc = Dropout(0.5)(fc)
-    fc = Dense(4)(fc)
+    fc = Dense(615)(fc)
 
     outputs = Activation('sigmoid')(fc)
 

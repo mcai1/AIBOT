@@ -10,10 +10,11 @@ from predict import predict
 from scipy.misc import imresize
 from game_control import get_id
 from get_dataset import save_img
-from multiprocessing import Process
+import multiprocessing
 from keras.models import model_from_json
 from pynput.mouse import Listener as mouse_listener
 from pynput.keyboard import Listener as key_listener
+import time
 
 def get_screenshot():
     img = ImageGrab.grab()
@@ -23,30 +24,18 @@ def get_screenshot():
 
 def save_event_keyboard(data_path, event, key):
     key = get_id(key)
-    data_path = data_path + '/-1,-1,{0},{1}'.format(event, key)
+    timestamp = int(time.time())
+    data_path = data_path + '/-1,-1,{0},{1},{2}.png'.format(event, key, timestamp)
+    print(data_path)
     screenshot = get_screenshot()
-    save_img(data_path, screenshot)
+    save_img(screenshot, data_path)
     return
 
 def save_event_mouse(data_path, x, y):
     data_path = data_path + '/{0},{1},0,0'.format(x, y)
     screenshot = get_screenshot()
-    save_img(data_path, screenshot)
+    save_img(screenshot, data_path)
     return
-
-def listen_mouse():
-    data_path = 'Data/Train_Data/Mouse'
-    if not os.path.exists(data_path):
-        os.makedirs(data_path)
-
-    def on_click(x, y, button, pressed):
-        save_event_mouse(data_path, x, y)
-
-    # TODO: on_scroll(x, y, dx, dy)
-    # TODO: on_move(x, y)
-
-    with mouse_listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as listener:
-        listener.join()
 
 def listen_keyboard():
     data_path = 'Data/Train_Data/Keyboard'
@@ -54,21 +43,24 @@ def listen_keyboard():
         os.makedirs(data_path)
 
     def on_press(key):
-        save_event_keyboard(data_path, 1, key)
+        try: k = key.char # single-char keys
+        except: k = key.name # other keys
+        save_event_keyboard(data_path, 1, k)
 
     def on_release(key):
-        save_event_keyboard(data_path, 2, key)
+        try: k = key.char # single-char keys
+        except: k = key.name # other keys
+        save_event_keyboard(data_path, 2, k)
 
     with key_listener(on_press=on_press, on_release=on_release) as listener:
         listener.join()
 
-def main(img_len):
+def main():
     dataset_path = 'Data/Train_Data/'
     if not os.path.exists(dataset_path):
         os.makedirs(dataset_path)
 
     # Start to listening mouse with new process:
-    Process(target=listen_mouse, args=()).start()
     listen_keyboard()
     return
 

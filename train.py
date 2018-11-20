@@ -4,8 +4,10 @@ import numpy
 from get_dataset import get_dataset
 from get_model import get_model, save_model
 from keras.callbacks import ModelCheckpoint, TensorBoard
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
 
-epochs = 100
+epochs = 50
 batch_size = 5
 
 def train_model(model, X, X_test, Y, Y_test):
@@ -21,9 +23,17 @@ def train_model(model, X, X_test, Y, Y_test):
     return model
 
 def main():
+    config = tf.ConfigProto(
+    gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.5))
+    # config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+    run_opts = tf.RunOptions(report_tensor_allocations_upon_oom = True)
+    sess = tf.Session(config=config)
+    set_session(sess)  # set this TensorFlow session as the default session for Keras
     X, X_test, Y, Y_test = get_dataset()
     model = get_model()
+    print("got model")
     model = train_model(model, X, X_test, Y, Y_test)
+    print("saving model")
     save_model(model)
     return model
 

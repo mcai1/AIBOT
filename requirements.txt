@@ -2,7 +2,7 @@ numpy
 scikit-learn
 scikit-image
 pillow
-tensorflow
+tensorflow-gpu
 keras
 pynput
 h5py
