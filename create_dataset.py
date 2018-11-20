@@ -25,10 +25,11 @@ def get_screenshot():
 def save_event_keyboard(data_path, event, key):
     key = get_id(key)
     timestamp = int(time.time())
-    data_path = data_path + '/-1,-1,{0},{1},{2}.png'.format(event, key, timestamp)
-    print(data_path)
+    data_path = data_path + '/{0}/{1}'.format(key, event)
+    if not os.path.exists(data_path):
+        os.makedirs(data_path)
     screenshot = get_screenshot()
-    save_img(screenshot, data_path)
+    save_img(screenshot, data_path+ '/{0}.png'.format(timestamp))
     return
 
 def save_event_mouse(data_path, x, y):
